@@ -4,7 +4,7 @@ import { StyleSheet, SafeAreaView, Platform, Dimensions } from 'react-native';
 import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { crop } from 'vision-camera-cropper';
-import { Svg, Rect } from 'react-native-svg';
+import { Svg, Rect, Circle } from 'react-native-svg';
 
 
 
@@ -20,6 +20,8 @@ export default function App() {
     height: 100
   });
   const taken = useSharedValue(false);
+  const shouldTake = useSharedValue(false);
+  const [pressed,setPressed] = React.useState(false);
   const device = useCameraDevice("back");
   const format = useCameraFormat(device, [
     { videoResolution: { width: 1920, height: 1080 } },
@@ -64,9 +66,10 @@ export default function App() {
     console.log("detect frame");
     console.log(frame.toString());
     updateFrameSizeJS(frame.width, frame.height);
-    if (taken.value == true) {
+    if (taken.value == false && shouldTake.value == true) {
       const result = crop(frame,{cropRegion:cropRegion,includeImageBase64:true});
       console.log(result);
+      shouldTake.value = false;
       taken.value = true;
     }
   }, [])
@@ -130,6 +133,35 @@ export default function App() {
             stroke="red"
             fillOpacity={0.0}
           />
+          <Rect 
+            x={0}
+            y={getFrameSize().height - 150}
+            width={getFrameSize().width}
+            height={150}
+            fill="black"
+            fillOpacity={0.8}
+          />
+          <Circle
+            x={getFrameSize().width/2}
+            y={getFrameSize().height - 75}
+            r={75}
+            fill="gray"
+          >
+          </Circle>
+          <Circle
+            x={getFrameSize().width/2}
+            y={getFrameSize().height - 75}
+            r={60}
+            fill={pressed?"gray":"white"}
+            onPressIn={()=>{
+              setPressed(true);
+            }}
+            onPressOut={()=>{
+              setPressed(false);
+              shouldTake.value = true;
+            }}
+          >
+          </Circle>
         </Svg>
       </>)}
     </SafeAreaView>
