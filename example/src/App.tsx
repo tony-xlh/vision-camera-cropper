@@ -1,23 +1,71 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
-import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera';
+import { StyleSheet, SafeAreaView, Platform, Dimensions } from 'react-native';
+import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { crop } from 'vision-camera-cropper';
+import { Svg, Rect } from 'react-native-svg';
+
+
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
+  const [frameWidth, setFrameWidth] = React.useState(1280);
+  const [frameHeight, setFrameHeight] = React.useState(720);
+  const [cropRegion,setCropRegion] = React.useState({
+    left: 0,
+    top: 0,
+    width: 100,
+    height: 100
+  });
   const taken = useSharedValue(false);
-
   const device = useCameraDevice("back");
+  const format = useCameraFormat(device, [
+    { videoResolution: { width: 1920, height: 1080 } },
+    { fps: 30 }
+  ])
+  const updateFrameSize = (width:number, height:number) => {
+    if (width != frameWidth && height!= frameHeight) {
+      setFrameWidth(width);
+      setFrameHeight(height);
+      updateCropRegion();
+    }
+  }
 
+  const updateCropRegion = () => {
+    const size = getFrameSize();
+    if (size.width>size.height) {
+      let regionWidth = 0.7*size.width;
+      let desiredRegionHeight = regionWidth/(85.6/54);
+      let height = Math.ceil(desiredRegionHeight/size.height*100);
+      setCropRegion({
+        left:15,
+        width:70,
+        top:10,
+        height:height
+      });
+    }else{
+      let regionWidth = 0.8*size.width;
+      let desiredRegionHeight = regionWidth/(85.6/54);
+      let height = Math.ceil(desiredRegionHeight/size.height*100);
+      setCropRegion({
+        left:10,
+        width:80,
+        top:20,
+        height:height
+      });
+    }
+  }
+
+  const updateFrameSizeJS = Worklets.createRunInJsFn(updateFrameSize);
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
     console.log("detect frame");
     console.log(frame.toString());
-    if (taken.value == false) {
-      const result = crop(frame,{includeImageBase64:true});
+    updateFrameSizeJS(frame.width, frame.height);
+    if (taken.value == true) {
+      const result = crop(frame,{cropRegion:cropRegion,includeImageBase64:true});
       console.log(result);
       taken.value = true;
     }
@@ -31,18 +79,58 @@ export default function App() {
     })();
   }, []);
 
+  const getViewBox = () => {
+    const frameSize = getFrameSize();
+    const viewBox = "0 0 "+frameSize.width+" "+frameSize.height;
+    return viewBox;
+  }
+
+  const getFrameSize = ():{width:number,height:number} => {
+    let width:number, height:number;
+    if (HasRotation()){
+      width = frameHeight;
+      height = frameWidth;
+    }else {
+      width = frameWidth;
+      height = frameHeight;
+    }
+    return {width:width,height:height};
+  }
+
+  const HasRotation = () => {
+    let value = false
+    if (Platform.OS === 'android') {
+      if (!(frameWidth>frameHeight && Dimensions.get('window').width>Dimensions.get('window').height)){
+        value = true;
+      }
+    }
+    return value;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {device != null &&
       hasPermission && (
       <>
-          <Camera
-            style={StyleSheet.absoluteFill}
-            isActive={isActive}
-            device={device}
-            frameProcessor={frameProcessor}
-            pixelFormat='yuv'
+        <Camera
+          style={StyleSheet.absoluteFill}
+          isActive={isActive}
+          device={device}
+          format={format}
+          frameProcessor={frameProcessor}
+          pixelFormat='yuv'
+        />
+        <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
+          <Rect 
+            x={cropRegion.left/100*getFrameSize().width}
+            y={cropRegion.top/100*getFrameSize().height}
+            width={cropRegion.width/100*getFrameSize().width}
+            height={cropRegion.height/100*getFrameSize().height}
+            strokeWidth="2"
+            stroke="red"
+            fillOpacity={0.0}
           />
+        </Svg>
       </>)}
     </SafeAreaView>
   );
