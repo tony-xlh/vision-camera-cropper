@@ -1,19 +1,34 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'vision-camera-cropper';
+import { useEffect, useState } from 'react';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [hasPermission, setHasPermission] = useState(false);
+  const [isActive,setIsActive] = useState(true);
+  const device = useCameraDevice("back");
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+  useEffect(() => {
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'granted');
+      setIsActive(true);
+    })();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      {device != null &&
+      hasPermission && (
+      <>
+          <Camera
+            style={StyleSheet.absoluteFill}
+            isActive={isActive}
+            device={device}
+            pixelFormat='yuv'
+          />
+      </>)}
+    </SafeAreaView>
   );
 }
 
