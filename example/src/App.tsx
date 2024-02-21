@@ -1,12 +1,20 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
-import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera';
+import { crop } from 'vision-camera-cropper';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
   const device = useCameraDevice("back");
+
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet'
+    console.log("detect frame");
+    console.log(frame.toString());
+    crop(frame);
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -25,6 +33,7 @@ export default function App() {
             style={StyleSheet.absoluteFill}
             isActive={isActive}
             device={device}
+            frameProcessor={frameProcessor}
             pixelFormat='yuv'
           />
       </>)}

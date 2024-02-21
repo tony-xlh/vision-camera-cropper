@@ -1,4 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
+import { VisionCameraProxy, type Frame } from 'react-native-vision-camera';
 
 const LINKING_ERROR =
   `The package 'vision-camera-cropper' doesn't seem to be linked. Make sure: \n\n` +
@@ -17,6 +18,17 @@ const VisionCameraCropper = NativeModules.VisionCameraCropper
       }
     );
 
+const plugin = VisionCameraProxy.initFrameProcessorPlugin('crop');
+
 export function multiply(a: number, b: number): Promise<number> {
   return VisionCameraCropper.multiply(a, b);
+}
+
+/**
+ * Crop
+ */
+export function crop(frame: Frame): any {
+  'worklet'
+  if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "crop"!')
+  return plugin.call(frame) as any;
 }
