@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import VisionCamera
 
 @objc(CropperFrameProcessorPlugin)
 public class CropperFrameProcessorPlugin: FrameProcessorPlugin {

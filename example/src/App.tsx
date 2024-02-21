@@ -73,6 +73,7 @@ export default function App() {
     if (taken.value == false && shouldTake.value == true && cropRegionShared.value != undefined) {
       console.log(cropRegionShared.value);
       const result = crop(frame,{cropRegion:cropRegionShared.value,includeImageBase64:true});
+      console.log(result);
       if (result.base64) {
         setImageDataJS("data:image/jpeg;base64,"+result.base64);
         shouldTake.value = false;
