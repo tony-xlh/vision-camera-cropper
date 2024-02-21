@@ -76,9 +76,9 @@ export default function App() {
       console.log(result);
       if (result.base64) {
         setImageDataJS("data:image/jpeg;base64,"+result.base64);
-        shouldTake.value = false;
         taken.value = true;
       }
+      shouldTake.value = false;
     }
   }, [])
 
