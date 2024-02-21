@@ -22,10 +22,9 @@ public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
   @Nullable
   @Override
   public Object callback(@NonNull Frame frame, @Nullable Map<String, Object> arguments) {
-    Log.d("DYM","frame processor");
     Map<String, Object> result = new HashMap<String, Object>();
     try {
-      Log.d("DYM",frame.getWidth()+"x"+frame.getHeight());
+      //Log.d("DYM",frame.getWidth()+"x"+frame.getHeight());
       Bitmap bm = BitmapUtils.getBitmap(frame);
       if (arguments != null && arguments.containsKey("cropRegion")) {
         Map<String,Object> cropRegion = (Map<String, Object>) arguments.get("cropRegion");
@@ -39,7 +38,7 @@ public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
       if (arguments != null && arguments.containsKey("includeImageBase64")) {
         boolean includeImageBase64 = (boolean) arguments.get("includeImageBase64");
         if (includeImageBase64 == true) {
-          result.put("imageBase64",BitmapUtils.bitmap2Base64(bm));
+          result.put("base64",BitmapUtils.bitmap2Base64(bm));
         }
       }
 
