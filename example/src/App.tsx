@@ -138,6 +138,8 @@ export default function App() {
     return null;
   }
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       {device != null &&
@@ -161,37 +163,35 @@ export default function App() {
             stroke="red"
             fillOpacity={0.0}
           />
-          <Rect 
-            x={0}
-            y={getFrameSize().height - 150}
-            width={getFrameSize().width}
-            height={150}
-            fill="black"
-            fillOpacity={0.8}
-          />
-          <Circle
-            x={getFrameSize().width/2}
-            y={getFrameSize().height - 75}
-            r={75}
-            fill="gray"
-          >
-          </Circle>
-          <Circle
-            x={getFrameSize().width/2}
-            y={getFrameSize().height - 75}
-            r={60}
-            fill={pressed?"gray":"white"}
-            onPressIn={()=>{
-              console.log("on press in ")
-              setPressed(true);
-            }}
-            onPressOut={()=>{
-              setPressed(false);
-              shouldTake.value = true;
-            }}
-          >
-          </Circle>
         </Svg>
+        <View style={styles.control}>
+          <View style={{flex:1.0}}>
+            <Svg viewBox={'0 0 '+getWindowWidth()+' '+getWindowHeight()*0.1}>
+              <Circle
+                x={getWindowWidth()/2}
+                y={getWindowHeight()*0.1/2}
+                r={getWindowHeight()*0.1/2}
+                fill="gray"
+              >
+              </Circle>
+              <Circle
+                x={getWindowWidth()/2}
+                y={getWindowHeight()*0.1/2}
+                r={getWindowHeight()*0.08/2}
+                fill={pressed?"gray":"white"}
+                onPressIn={()=>{
+                  console.log("on press in ")
+                  setPressed(true);
+                }}
+                onPressOut={()=>{
+                  setPressed(false);
+                  shouldTake.value = true;
+                }}
+              >
+              </Circle>
+            </Svg>
+          </View>  
+        </View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -226,6 +226,10 @@ const getWindowWidth = () => {
   return Dimensions.get("window").width;
 }
 
+const getWindowHeight = () => {
+  return Dimensions.get("window").height;
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -236,6 +240,18 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginVertical: 20,
+  },
+  control:{
+    flexDirection:"row",
+    position: 'absolute',
+    bottom: 0,
+    height: "10%",
+    width:"100%",
+    alignSelf:"flex-start",
+    borderColor: "white",
+    borderWidth: 0.1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    alignItems: 'center',
   },
   centeredView: {
     flex: 1,
