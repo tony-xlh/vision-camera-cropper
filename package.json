@@ -37,7 +37,10 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "cropper",
+    "image-processing",
+    "vision-camera"
   ],
   "repository": {
     "type": "git",
