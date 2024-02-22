@@ -12,7 +12,6 @@ export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
   const [imageData,setImageData] = useState<undefined|string>(undefined);
-  const setImageDataJS = Worklets.createRunInJsFn(setImageData);
   const [frameWidth, setFrameWidth] = useState(1080);
   const [frameHeight, setFrameHeight] = useState(1920);
   const [cropRegion,setCropRegion] = useState({
@@ -34,7 +33,6 @@ export default function App() {
     if (width != frameWidth && height!= frameHeight) {
       setFrameWidth(width);
       setFrameHeight(height);
-      updateCropRegion();
     }
   }
 
@@ -67,6 +65,8 @@ export default function App() {
   }
 
   const updateFrameSizeJS = Worklets.createRunInJsFn(updateFrameSize);
+  const setImageDataJS = Worklets.createRunInJsFn(setImageData);
+
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
     updateFrameSizeJS(frame.width, frame.height);
@@ -91,8 +91,14 @@ export default function App() {
     })();
   }, []);
 
+  useEffect(() => {
+    updateCropRegion();
+  }, [frameWidth,frameHeight]);
+
   const getViewBox = () => {
     const frameSize = getFrameSize();
+    console.log("getViewBox");
+    console.log(frameSize);
     const viewBox = "0 0 "+frameSize.width+" "+frameSize.height;
     return viewBox;
   }
