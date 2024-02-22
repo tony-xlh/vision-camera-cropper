@@ -13,8 +13,8 @@ export default function App() {
   const [isActive,setIsActive] = useState(true);
   const [imageData,setImageData] = useState<undefined|string>(undefined);
   const setImageDataJS = Worklets.createRunInJsFn(setImageData);
-  const [frameWidth, setFrameWidth] = useState(1280);
-  const [frameHeight, setFrameHeight] = useState(720);
+  const [frameWidth, setFrameWidth] = useState(1080);
+  const [frameHeight, setFrameHeight] = useState(1920);
   const [cropRegion,setCropRegion] = useState({
     left: 0,
     top: 0,
@@ -87,6 +87,7 @@ export default function App() {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
       setIsActive(true);
+      updateCropRegion();
     })();
   }, []);
 
