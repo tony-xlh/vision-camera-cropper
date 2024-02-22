@@ -2,6 +2,8 @@
 
 A react native vision camera frame processor for cropping
 
+[Demo video](https://github.com/tony-xlh/vision-camera-cropper/assets/5462205/81031752-4179-4439-a8c6-97f73587fd56)
+
 ## Installation
 
 ```sh
