@@ -10,10 +10,9 @@
 #import <VisionCamera/FrameProcessorPlugin.h>
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 #import <VisionCamera/Frame.h>
-#import "VisionCameraCropper-Swift.h"
 #import "VisionCameraCropper-Bridging-Header.h"
 
-@interface CropperFrameProcessorPlugin (FrameProcessorPluginLoader)
+@interface CropperFrameProcessorPlugin: FrameProcessorPlugin
 @end
 
 @implementation CropperFrameProcessorPlugin (FrameProcessorPluginLoader)
