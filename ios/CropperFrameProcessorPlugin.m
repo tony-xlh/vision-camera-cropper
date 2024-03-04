@@ -15,7 +15,7 @@
 @interface CropperFrameProcessorPlugin: FrameProcessorPlugin
 @end
 
-@implementation CropperFrameProcessorPlugin (FrameProcessorPluginLoader)
+@implementation CropperFrameProcessorPlugin (FrameProcessorPlugin)
 
 + (void)load
 {
