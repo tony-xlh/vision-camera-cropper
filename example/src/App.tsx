@@ -12,7 +12,7 @@ export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
   const [imageData,setImageData] = useState<undefined|string>(undefined);
-  const setImageDataJS = Worklets.createRunInJsFn(setImageData);
+  const setImageDataJS = Worklets.createRunOnJS(setImageData);
   const [frameWidth, setFrameWidth] = useState(1080);
   const [frameHeight, setFrameHeight] = useState(1920);
   const [cropRegion,setCropRegion] = useState({
@@ -66,7 +66,7 @@ export default function App() {
     cropRegionShared.value = region;
   }
 
-  const updateFrameSizeJS = Worklets.createRunInJsFn(updateFrameSize);
+  const updateFrameSizeJS = Worklets.createRunOnJS(updateFrameSize);
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
     updateFrameSizeJS(frame.width, frame.height);
