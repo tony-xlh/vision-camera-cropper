@@ -2,6 +2,12 @@
 
 A react native vision camera frame processor for cropping
 
+## Versions
+
+For Vision Camera v3, use versions 0.x.
+
+For Vision Camera v4, use versions >= 1.0.0.
+
 ## Installation
 
 ```sh
