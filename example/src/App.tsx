@@ -22,6 +22,8 @@ export default function App() {
     height: 100
   });
   const cropRegionShared = useSharedValue<undefined|CropRegion>(undefined);
+  const frameWidthShared = useSharedValue(1080);
+  const frameHeightShared = useSharedValue(1920);
   const taken = useSharedValue(false);
   const shouldTake = useSharedValue(false);
   const [pressed,setPressed] = React.useState(false);
@@ -31,15 +33,25 @@ export default function App() {
     { fps: 30 }
   ])
   const updateFrameSize = (width:number, height:number) => {
-    if (width != frameWidth && height!= frameHeight) {
+    if (width != frameWidthShared.value && height!= frameHeightShared.value) {
+      frameWidthShared.value = width;
+      frameHeightShared.value = height;
       setFrameWidth(width);
       setFrameHeight(height);
-      updateCropRegion();
+      if (HasRotation()){
+        updateCropRegion({width:height,height:width});
+      }else{
+        updateCropRegion({width:width,height:height});
+      }
+      
     }
   }
 
-  const updateCropRegion = () => {
-    const size = getFrameSize();
+  const updateCropRegion = (size?:{width:number,height:number}) => {
+    //const size = getFrameSize();
+    if (!size) {
+      size = getFrameSize();
+    } 
     let region;
     if (size.width>size.height) {
       let regionWidth = 0.7*size.width;
@@ -64,16 +76,18 @@ export default function App() {
     }
     setCropRegion(region);
     cropRegionShared.value = region;
+    console.log(region)
   }
 
   const updateFrameSizeJS = Worklets.createRunOnJS(updateFrameSize);
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
+    //console.log(frame.width+"x"+frame.height);
     updateFrameSizeJS(frame.width, frame.height);
     if (taken.value == false && shouldTake.value == true && cropRegionShared.value != undefined) {
       console.log(cropRegionShared.value);
       const result = crop(frame,{cropRegion:cropRegionShared.value,includeImageBase64:true});
-      console.log(result);
+      //console.log(result);
       if (result.base64) {
         setImageDataJS("data:image/jpeg;base64,"+result.base64);
         taken.value = true;
@@ -153,7 +167,7 @@ export default function App() {
           frameProcessor={frameProcessor}
           pixelFormat='yuv'
         />
-        <Svg preserveAspectRatio={(Platform.OS == 'ios') ? '':'xMidYMid slice'} style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
+        <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
           <Rect 
             x={cropRegion.left/100*getFrameSize().width}
             y={cropRegion.top/100*getFrameSize().height}
