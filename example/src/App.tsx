@@ -6,8 +6,6 @@ import { useSharedValue } from 'react-native-worklets-core';
 import { type CropRegion, crop } from 'vision-camera-cropper';
 import { Svg, Rect, Circle, Image } from 'react-native-svg';
 
-
-
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
@@ -43,7 +41,6 @@ export default function App() {
       }else{
         updateCropRegion({width:width,height:height});
       }
-      
     }
   }
 
@@ -105,8 +102,14 @@ export default function App() {
     })();
   }, []);
 
+  useEffect(() => {
+    updateCropRegion();
+  }, [frameWidth,frameHeight]);
+
   const getViewBox = () => {
     const frameSize = getFrameSize();
+    console.log("getViewBox");
+    console.log(frameSize);
     const viewBox = "0 0 "+frameSize.width+" "+frameSize.height;
     return viewBox;
   }

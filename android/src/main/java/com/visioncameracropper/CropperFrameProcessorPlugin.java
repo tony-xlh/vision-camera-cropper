@@ -56,6 +56,4 @@ public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
     }
     return result;
   }
-
-
 }
