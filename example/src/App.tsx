@@ -181,6 +181,7 @@ export default function App() {
           format={format}
           frameProcessor={frameProcessor}
           pixelFormat='yuv'
+          resizeMode='contain'
         />
         <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
           <Rect 
