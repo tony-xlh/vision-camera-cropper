@@ -27,11 +27,22 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
         return cropResult
     }
 
-    let image:UIImage;
+    var image:UIImage = UIImage(cgImage: cgImage)
+    var degree = 0.0;
+    if UIDevice.current.orientation == UIDeviceOrientation.portrait {
+        degree = 90.0;
+    }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+        degree = 270.0;
+    }
+    if degree != 0.0 {
+        image = rotate(image:image,degree:degree)
+    }
+      
+
     let cropRegion = arguments?["cropRegion"] as? [String: Int]
     if cropRegion != nil {
-      let imgWidth = Double(cgImage.width)
-      let imgHeight = Double(cgImage.height)
+      let imgWidth = Double(image.cgImage!.width)
+      let imgHeight = Double(image.cgImage!.height)
       let left:Double = Double(cropRegion?["left"] ?? 0) / 100.0 * imgWidth
       let top:Double = Double(cropRegion?["top"] ?? 0) / 100.0 * imgHeight
       let width:Double = Double(cropRegion?["width"] ?? 100) / 100.0 * imgWidth
@@ -46,13 +57,11 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
           height: height
       ).integral
 
-      let cropped = cgImage.cropping(
+      let cropped = image.cgImage!.cropping(
           to: cropRect
       )!
       image = UIImage(cgImage: cropped)
       print("use cropped image")
-    }else{
-      image = UIImage(cgImage: cgImage)
     }
     let includeImageBase64 = arguments!["includeImageBase64"] as? Bool ?? false
     if includeImageBase64 == true {
@@ -80,4 +89,27 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
     }
     return ""
   }
+    
+
+    func rotate(image: UIImage, degree: CGFloat) -> UIImage {
+        let radians = degree / (180.0 / .pi)
+        let rotatedSize = CGRect(origin: .zero, size: image.size)
+            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+            .integral.size
+        UIGraphicsBeginImageContext(rotatedSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            let origin = CGPoint(x: rotatedSize.width / 2.0,
+                                 y: rotatedSize.height / 2.0)
+            context.translateBy(x: origin.x, y: origin.y)
+            context.rotate(by: radians)
+            image.draw(in: CGRect(x: -origin.y, y: -origin.x,
+                                  width: image.size.width, height: image.size.height))
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return rotatedImage ?? image
+        }
+        return image
+    }
+
 }

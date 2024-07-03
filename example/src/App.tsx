@@ -27,9 +27,11 @@ export default function App() {
   const [pressed,setPressed] = React.useState(false);
   const device = useCameraDevice("back");
   const format = useCameraFormat(device, [
+    { videoAspectRatio: 16 / 9 },
+    { photoAspectRatio: 16 / 9 },
     { videoResolution: { width: 1920, height: 1080 } },
-    { fps: 30 }
-  ])
+    { fps: 30 },
+  ]);
   const updateFrameSize = (width:number, height:number) => {
     if (width != frameWidthShared.value && height!= frameHeightShared.value) {
       frameWidthShared.value = width;
@@ -95,6 +97,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      console.log("mounted");
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
       setIsActive(true);
@@ -134,10 +137,8 @@ export default function App() {
 
   const HasRotation = () => {
     let value = false
-    if (Platform.OS === 'android') {
-      if (!(frameWidth>frameHeight && Dimensions.get('window').width>Dimensions.get('window').height)){
-        value = true;
-      }
+    if (!(frameWidth>frameHeight && Dimensions.get('window').width>Dimensions.get('window').height)){
+      value = true;
     }
     return value;
   }
