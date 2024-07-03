@@ -20,8 +20,8 @@ const VisionCameraCropper = NativeModules.VisionCameraCropper
 
 const plugin = VisionCameraProxy.initFrameProcessorPlugin('crop');
 
-export function multiply(a: number, b: number): Promise<number> {
-  return VisionCameraCropper.multiply(a, b);
+export function rotateImage(base64:string,degree:number): Promise<string> {
+  return VisionCameraCropper.rotateImage(base64,degree);
 }
 
 /**
