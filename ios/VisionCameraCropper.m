@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(VisionCameraCropper, NSObject)
 
-RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b
+RCT_EXTERN_METHOD(rotateImage:(NSString)base64 degree:(float)degree
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 

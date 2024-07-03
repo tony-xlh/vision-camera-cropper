@@ -35,7 +35,7 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
         degree = 270.0;
     }
     if degree != 0.0 {
-        image = rotate(image:image,degree:degree)
+        image = VisionCameraCropper.rotate(image:image,degree:degree)
     }
       
 
@@ -65,7 +65,7 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
     }
     let includeImageBase64 = arguments!["includeImageBase64"] as? Bool ?? false
     if includeImageBase64 == true {
-        cropResult["base64"] = getBase64FromImage(image)
+        cropResult["base64"] = VisionCameraCropper.getBase64FromImage(image)
     }
     let saveAsFile = arguments!["saveAsFile"] as? Bool ?? false
     if saveAsFile == true {
@@ -82,34 +82,5 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
     return url.path
   }
     
-  func getBase64FromImage(_ image:UIImage) -> String {
-    let dataTmp = image.jpegData(compressionQuality: 100)
-    if let data = dataTmp {
-        return data.base64EncodedString()
-    }
-    return ""
-  }
-    
-
-    func rotate(image: UIImage, degree: CGFloat) -> UIImage {
-        let radians = degree / (180.0 / .pi)
-        let rotatedSize = CGRect(origin: .zero, size: image.size)
-            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
-            .integral.size
-        UIGraphicsBeginImageContext(rotatedSize)
-        if let context = UIGraphicsGetCurrentContext() {
-            let origin = CGPoint(x: rotatedSize.width / 2.0,
-                                 y: rotatedSize.height / 2.0)
-            context.translateBy(x: origin.x, y: origin.y)
-            context.rotate(by: radians)
-            image.draw(in: CGRect(x: -origin.y, y: -origin.x,
-                                  width: image.size.width, height: image.size.height))
-            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-
-            return rotatedImage ?? image
-        }
-        return image
-    }
-
+  
 }

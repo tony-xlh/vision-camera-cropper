@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, Platform, Dimensions, Pressable, View, Modal, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text } from 'react-native';
 import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
-import { type CropRegion, crop } from 'vision-camera-cropper';
+import { type CropRegion, crop, rotateImage } from 'vision-camera-cropper';
 import { Svg, Rect, Circle, Image } from 'react-native-svg';
 
 export default function App() {
@@ -156,7 +156,18 @@ export default function App() {
     return null;
   }
 
-  
+  const rotateTakenImage = async () => {
+    console.log("rotate")
+    if (imageData) {
+      console.log("hasimage")
+      let rotated = await rotateImage(removeDataURLHead(imageData),90);
+      setImageData("data:image/jpeg;base64,"+rotated);
+    }
+  }
+
+  const removeDataURLHead = (dataURL:string) => {
+    return dataURL.substring(dataURL.indexOf(",")+1,dataURL.length);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -223,13 +234,21 @@ export default function App() {
               {renderImage()}
               <View style={styles.buttonView}>
                   <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.button, styles.buttonInModal]}
                     onPress={() => {
                       setImageData(undefined);
                       taken.value = false;
                     }}
                   >
                     <Text style={styles.textStyle}>Rescan</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.button, styles.buttonInModal]}
+                    onPress={() => {
+                      rotateTakenImage();
+                    }}
+                  >
+                    <Text style={styles.textStyle}>Rotate</Text>
                   </Pressable>
               </View>
             </View>
@@ -303,7 +322,7 @@ const styles = StyleSheet.create({
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
-  buttonClose: {
+  buttonInModal: {
     backgroundColor: "#2196F3",
   },
   textStyle: {
