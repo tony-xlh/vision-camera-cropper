@@ -63,6 +63,7 @@ export interface CropRegion{
 export interface CropConfig{
   cropRegion?: CropRegion;
   includeImageBase64?: boolean;
+  saveBitmap?: boolean;
   saveAsFile?: boolean;
 }
 

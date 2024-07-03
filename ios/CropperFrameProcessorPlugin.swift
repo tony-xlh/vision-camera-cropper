@@ -9,6 +9,7 @@ import Foundation
 
 @objc(CropperFrameProcessorPlugin)
 public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
+  static public var frameTaken:UIImage!
   public override init(proxy: VisionCameraProxyHolder, options: [AnyHashable : Any]! = [:]) {
     super.init(proxy: proxy, options: options)
   }
@@ -67,6 +68,10 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
     if includeImageBase64 == true {
         cropResult["base64"] = VisionCameraCropper.getBase64FromImage(image)
     }
+    let saveBitmap = arguments!["saveBitmap"] as? Bool ?? false
+    if saveBitmap == true {
+        CropperFrameProcessorPlugin.frameTaken = image
+    }
     let saveAsFile = arguments!["saveAsFile"] as? Bool ?? false
     if saveAsFile == true {
       cropResult["path"] = saveImage(image)
@@ -82,5 +87,7 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
     return url.path
   }
     
-  
+  @objc static func getBitmap() -> UIImage? {
+    return frameTaken
+  }
 }
