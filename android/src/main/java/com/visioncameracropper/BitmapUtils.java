@@ -89,9 +89,9 @@ public class BitmapUtils {
         if (orientation.name().equals(Orientation.PORTRAIT.name())) {
             return 0;
         }else if (orientation.name().equals(Orientation.LANDSCAPE_LEFT.name())) {
-            return 90;
-        } else if (orientation.name().equals(Orientation.LANDSCAPE_RIGHT.name())) {
             return 270;
+        } else if (orientation.name().equals(Orientation.LANDSCAPE_RIGHT.name())) {
+            return 90;
         }else if (orientation.name().equals(Orientation.PORTRAIT_UPSIDE_DOWN.name())) {
             return 180;
         }
