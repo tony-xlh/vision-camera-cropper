@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
+  static public Bitmap frameTaken;
   CropperFrameProcessorPlugin(@NonNull VisionCameraProxy proxy, @Nullable Map<String, Object> options) {super();}
 
   @Nullable
@@ -42,6 +43,13 @@ public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
         }
       }
 
+      if (arguments != null && arguments.containsKey("saveBitmap")) {
+        boolean saveBitmap = (boolean) arguments.get("saveBitmap");
+        if (saveBitmap == true) {
+          frameTaken = bm;
+        }
+      }
+
       if (arguments != null && arguments.containsKey("saveAsFile")) {
         boolean saveAsFile = (boolean) arguments.get("saveAsFile");
         if (saveAsFile == true) {
@@ -55,5 +63,13 @@ public class CropperFrameProcessorPlugin extends FrameProcessorPlugin {
       throw new RuntimeException(e);
     }
     return result;
+  }
+
+  static public Bitmap getBitmap() {
+    try {
+      return frameTaken;
+    } catch (Exception e) {
+      return null;
+    }
   }
 }
