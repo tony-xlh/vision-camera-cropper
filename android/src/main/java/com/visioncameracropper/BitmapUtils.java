@@ -99,7 +99,7 @@ public class BitmapUtils {
     }
 
     /** Rotates a bitmap if it is converted from a bytebuffer. */
-    private static Bitmap rotateBitmap(
+    public static Bitmap rotateBitmap(
             Bitmap bitmap, int rotationDegrees, boolean flipX, boolean flipY) {
         Matrix matrix = new Matrix();
 

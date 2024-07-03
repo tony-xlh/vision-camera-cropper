@@ -1,5 +1,7 @@
 package com.visioncameracropper;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
@@ -29,7 +31,9 @@ public class VisionCameraCropperModule extends ReactContextBaseJavaModule {
   // Example method
   // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(a * b);
+  public void rotateImage(String base64, int degree, Promise promise) {
+    Bitmap bitmap = BitmapUtils.base642Bitmap(base64);
+    Bitmap rotated = BitmapUtils.rotateBitmap(bitmap, degree,false,false);
+    promise.resolve(BitmapUtils.bitmap2Base64(rotated));
   }
 }
