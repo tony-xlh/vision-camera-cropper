@@ -886,7 +886,7 @@ PODS:
   - React-Mapbuffer (0.73.4):
     - glog
     - React-debug
-  - react-native-worklets-core (1.1.1):
+  - react-native-worklets-core (1.3.3):
     - React
     - React-callinvoker
     - React-Core
@@ -1060,19 +1060,19 @@ PODS:
   - RNSVG (15.2.0):
     - React-Core
   - SocketRocket (0.6.1)
-  - VisionCamera (4.0.1):
-    - VisionCamera/Core (= 4.0.1)
-    - VisionCamera/FrameProcessors (= 4.0.1)
-    - VisionCamera/React (= 4.0.1)
-  - VisionCamera/Core (4.0.1)
-  - VisionCamera/FrameProcessors (4.0.1):
+  - VisionCamera (4.4.0):
+    - VisionCamera/Core (= 4.4.0)
+    - VisionCamera/FrameProcessors (= 4.4.0)
+    - VisionCamera/React (= 4.4.0)
+  - VisionCamera/Core (4.4.0)
+  - VisionCamera/FrameProcessors (4.4.0):
     - React
     - React-callinvoker
     - react-native-worklets-core
-  - VisionCamera/React (4.0.1):
+  - VisionCamera/React (4.4.0):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraCropper (0.1.0):
+  - VisionCameraCropper (1.0.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1278,7 +1278,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 9ac353eccf6ab54d1e0a33862ba91221d1e88460
   React-logger: 0a57b68dd2aec7ff738195f081f0520724b35dab
   React-Mapbuffer: 63913773ed7f96b814a2521e13e6d010282096ad
-  react-native-worklets-core: ff2156b19b8f4a979fa0db52659e39a755b1454b
+  react-native-worklets-core: f51430dd07bf5343d4918d28a4bb00fe8f98b982
   React-nativeconfig: d7af5bae6da70fa15ce44f045621cf99ed24087c
   React-NativeModulesApple: 0123905d5699853ac68519607555a9a4f5c7b3ac
   React-perflogger: 8a1e1af5733004bdd91258dcefbde21e0d1faccd
@@ -1301,8 +1301,8 @@ SPEC CHECKSUMS:
   ReactCommon: 840a955d37b7f3358554d819446bffcf624b2522
   RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  VisionCamera: 8e00df84a76cf26ca70ecd3b6ed05dc0d3b60beb
-  VisionCameraCropper: 779f05b1e90ac3e76e16e8a8fce62b573a0e63a1
+  VisionCamera: 5b17187dd09e4c8bef7c0b1d5abebfb268ff703d
+  VisionCameraCropper: 234f446c94d729fabe269c1fc7132e7f1e63977c
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 
 PODFILE CHECKSUM: 887ee2fd394ebc79ee7809bc29a37a1785d52772
