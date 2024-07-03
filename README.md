@@ -30,25 +30,56 @@ module.exports = {
 
 ## Usage
 
-Crop a frame and return its base64 or path.
-   
-```js
-import { crop } from 'vision-camera-cropper';
+1. Crop a frame and return its base64 or path.
+      
+    ```js
+    import { crop } from 'vision-camera-cropper';
 
-// ...
-const frameProcessor = useFrameProcessor((frame) => {
-  'worklet';
-  //coordinates in percentage
-  const cropRegion = {
-    left:10,
-    top:10,
-    width:80,
-    height:30
-  }
-  const result = crop(frame,{cropRegion:cropRegion,includeImageBase64:true,saveAsFile:false});
-  console.log(result.base64);
-}, []);
+    // ...
+    const frameProcessor = useFrameProcessor((frame) => {
+      'worklet';
+      //coordinates in percentage
+      const cropRegion = {
+        left:10,
+        top:10,
+        width:80,
+        height:30
+      }
+      const result = crop(frame,{cropRegion:cropRegion,includeImageBase64:true,saveAsFile:false});
+      console.log(result.base64);
+    }, []);
+    ```
+
+2. Rotate an image.
+
+    ```js
+    const rotated = await rotateImage(base64,degree);
+    ```
+
+## Get Bitmap/UIImage via Reflection
+
+If you are developing a plugin to get the camera frames, you can use reflection to get it as Bitmap or UIImage on the native side.
+
+Java:
+
+```java
+Class cls = Class.forName("com.visioncameracropper.CropperFrameProcessorPlugin");
+Method m = cls.getMethod("getBitmap",null);
+Bitmap bitmap = (Bitmap) m.invoke(null, null);
 ```
+
+
+Objective-C:
+
+```objc
+- (UIImage*)getUIImage{
+    UIImage *image = ((UIImage* (*)(id, SEL))objc_msgSend)(objc_getClass("CropperFrameProcessorPlugin"), sel_registerName("getBitmap"));
+    return image;
+}
+```
+
+You have to pass `{saveBitmap: true}` for the `crop` function.
+
 
 ## Contributing
 
