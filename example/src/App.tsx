@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch, Image } from 'react-native';
 import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { type CropRegion, crop, rotateImage } from 'vision-camera-cropper';
-import { Svg, Rect, Circle, Image, Path } from 'react-native-svg';
+import { Svg, Rect, Circle, Path } from 'react-native-svg';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -155,11 +155,9 @@ export default function App() {
   const renderImage = () =>{
     if (imageData != undefined) {
       return (
-        <Svg style={styles.srcImage} viewBox={getViewBoxForCroppedImage()}>
-          <Image
-            href={{uri:imageData}}
-          />
-        </Svg>
+        <Image style={styles.srcImage}
+          source={{uri:imageData}}
+        />
       );
     }
     return null;
