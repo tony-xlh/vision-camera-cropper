@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch, Image } from 'react-native';
-import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
+import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor, type Orientation } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { type CropRegion, crop, rotateImage } from 'vision-camera-cropper';
 import { Svg, Rect, Circle, Path } from 'react-native-svg';
 
 export default function App() {
+  const [orientation,setOrientation] = useState<Orientation>('portrait');
   const [hasPermission, setHasPermission] = useState(false);
   const [isActive,setIsActive] = useState(true);
   const [imageData,setImageData] = useState<undefined|string>(undefined);
@@ -126,15 +127,9 @@ export default function App() {
     return viewBox;
   }
 
-  const getViewBoxForCroppedImage = () => {
-    const frameSize = getFrameSize();
-    const viewBox = "0 0 "+(frameSize.width*cropRegion.width/100)+" "+(frameSize.height*cropRegion.height/100);
-    return viewBox;
-  }
-
   const getFrameSize = ():{width:number,height:number} => {
     let width:number, height:number;
-    if (HasRotation()){
+    if (orientation == 'portrait'){
       width = frameHeight;
       height = frameWidth;
     }else {
@@ -142,14 +137,6 @@ export default function App() {
       height = frameHeight;
     }
     return {width:width,height:height};
-  }
-
-  const HasRotation = () => {
-    let value = false
-    if (!(frameWidth>frameHeight && Dimensions.get('window').width>Dimensions.get('window').height)){
-      value = true;
-    }
-    return value;
   }
 
   const renderImage = () =>{
@@ -176,6 +163,12 @@ export default function App() {
     return dataURL.substring(dataURL.indexOf(",")+1,dataURL.length);
   }
 
+  const onPreviewOrientationChanged = (e:Orientation) => {
+    console.log("orientation changed")
+    console.log(e);
+    setOrientation(e);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {back != null && front!= null &&
@@ -189,6 +182,7 @@ export default function App() {
           frameProcessor={frameProcessor}
           pixelFormat='yuv'
           resizeMode='contain'
+          onPreviewOrientationChanged={(options)=>{onPreviewOrientationChanged(options)}}
         />
         <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
           <Rect 
@@ -243,6 +237,7 @@ export default function App() {
           animationType="slide"
           transparent={true}
           visible={(imageData != undefined)}
+          supportedOrientations={['portrait','landscape']}
           onRequestClose={() => {
             setImageData(undefined);
           }}
