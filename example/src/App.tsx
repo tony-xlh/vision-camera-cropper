@@ -48,7 +48,7 @@ export default function App() {
       frameHeightShared.value = height;
       setFrameWidth(width);
       setFrameHeight(height);
-      if (HasRotation()){
+      if (orientation == "portrait"){
         updateCropRegion({width:height,height:width});
       }else{
         updateCropRegion({width:width,height:height});
