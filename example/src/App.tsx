@@ -196,18 +196,18 @@ export default function App() {
           />
         </Svg>
         <View style={styles.control}>
-            <Svg viewBox={'0 0 '+getWindowWidth()+' '+getWindowHeight()*0.1}>
+            <Svg viewBox={'0 0 24 24'}  style={styles.shutter}>
               <Circle
-                x={getWindowWidth()/2}
-                y={getWindowHeight()*0.1/2}
-                r={getWindowHeight()*0.1/2}
+                x={12}
+                y={12}
+                r={12}
                 fill="gray"
               >
               </Circle>
               <Circle
-                x={getWindowWidth()/2}
-                y={getWindowHeight()*0.1/2}
-                r={getWindowHeight()*0.08/2}
+                x={12}
+                y={12}
+                r={10}
                 fill={pressed?"gray":"white"}
                 onPressIn={()=>{
                   console.log("on press in ")
@@ -286,6 +286,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  shutter:{
+    width:getWindowHeight()*0.1,
+    height:getWindowHeight()*0.1,
+  },
   camera:{
     position:'absolute',
     left: 10,
@@ -308,7 +312,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderWidth: 0.1,
     backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: 'center',
+    justifyContent: 'center',
   },
   centeredView: {
     flex: 1,
