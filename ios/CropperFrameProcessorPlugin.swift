@@ -30,11 +30,13 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
 
     var image:UIImage = UIImage(cgImage: cgImage)
     var degree = 0.0;
-    if UIDevice.current.orientation == UIDeviceOrientation.portrait {
+
+    if frame.orientation == UIImage.Orientation.left {
         degree = 90.0;
-    }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+    }else if frame.orientation == UIImage.Orientation.down {
         degree = 270.0;
     }
+      
     if degree != 0.0 {
         image = VisionCameraCropper.rotate(image:image,degree:degree)
     }
