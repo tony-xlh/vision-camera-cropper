@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch, Image, Platform } from 'react-native';
 import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor, type Orientation } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { type CropRegion, crop, rotateImage } from 'vision-camera-cropper';
@@ -184,7 +184,7 @@ export default function App() {
           resizeMode='contain'
           onPreviewOrientationChanged={(options)=>{onPreviewOrientationChanged(options)}}
         />
-        <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
+        <Svg preserveAspectRatio={Platform.OS == 'android'?'xMidYMid slice':''} style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
           <Rect 
             x={cropRegion.left/100*getFrameSize().width}
             y={cropRegion.top/100*getFrameSize().height}
