@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions, Pressable, View, Modal, Text, Switch } from 'react-native';
 import { Camera, useCameraDevice, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import { useSharedValue } from 'react-native-worklets-core';
 import { type CropRegion, crop, rotateImage } from 'vision-camera-cropper';
-import { Svg, Rect, Circle, Image } from 'react-native-svg';
+import { Svg, Rect, Circle, Image, Path } from 'react-native-svg';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -25,8 +25,17 @@ export default function App() {
   const taken = useSharedValue(false);
   const shouldTake = useSharedValue(false);
   const [pressed,setPressed] = React.useState(false);
-  const device = useCameraDevice("back");
-  const format = useCameraFormat(device, [
+  const [switchPressed,setSwitchPressed] = React.useState(false);
+  const [isFront,setIsFront] = React.useState(false);
+  const back = useCameraDevice("back");
+  const front = useCameraDevice("front");
+  const backFormat = useCameraFormat(back, [
+    { videoAspectRatio: 16 / 9 },
+    { photoAspectRatio: 16 / 9 },
+    { videoResolution: { width: 1920, height: 1080 } },
+    { fps: 30 },
+  ]);
+  const frontFormat = useCameraFormat(front, [
     { videoAspectRatio: 16 / 9 },
     { photoAspectRatio: 16 / 9 },
     { videoResolution: { width: 1920, height: 1080 } },
@@ -171,14 +180,14 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {device != null &&
+      {back != null && front!= null &&
       hasPermission && (
       <>
         <Camera
           style={StyleSheet.absoluteFill}
           isActive={isActive}
-          device={device}
-          format={format}
+          device={isFront?front:back}
+          format={isFront?frontFormat:backFormat}
           frameProcessor={frameProcessor}
           pixelFormat='yuv'
           resizeMode='contain'
@@ -195,7 +204,6 @@ export default function App() {
           />
         </Svg>
         <View style={styles.control}>
-          <View style={{flex:1.0}}>
             <Svg viewBox={'0 0 '+getWindowWidth()+' '+getWindowHeight()*0.1}>
               <Circle
                 x={getWindowWidth()/2}
@@ -220,8 +228,19 @@ export default function App() {
               >
               </Circle>
             </Svg>
-          </View>  
         </View>
+        <Svg style={styles.camera} viewBox="0 0 24 24"
+          onPressIn={()=>{
+            console.log("on press in ")
+            setSwitchPressed(true);
+          }}
+          onPressOut={()=>{
+            setSwitchPressed(false);
+            setIsFront(!isFront)
+          }} >
+          <Path fill={switchPressed?"gray":"white"} d="M21 6h-1.5a.5.5 0 0 1-.5-.5A1.502 1.502 0 0 0 17.5 4h-6A1.502 1.502 0 0 0 10 5.5a.5.5 0 0 1-.5.5H8V5H4v1H3a2.002 2.002 0 0 0-2 2v10a2.002 2.002 0 0 0 2 2h18a2.002 2.002 0 0 0 2-2V8a2.002 2.002 0 0 0-2-2zm1 12a1.001 1.001 0 0 1-1 1H3a1.001 1.001 0 0 1-1-1V8a1.001 1.001 0 0 1 1-1h2V6h2v1h2.5A1.502 1.502 0 0 0 11 5.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5A1.502 1.502 0 0 0 19.5 7H21a1.001 1.001 0 0 1 1 1zM8.2 13h-1a4.796 4.796 0 0 1 8.8-2.644V9h1v3h-3v-1h1.217A3.79 3.79 0 0 0 8.2 13zm7.6 0h1A4.796 4.796 0 0 1 8 15.644V17H7v-3h3v1H8.783a3.79 3.79 0 0 0 7.017-2z"/>
+          <Path fill="none" d="M0 0h24v24H0z"/>
+        </Svg> 
         <Modal
           animationType="slide"
           transparent={true}
@@ -274,6 +293,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  camera:{
+    position:'absolute',
+    left: 10,
+    bottom: getWindowHeight()*0.01, 
+    height: getWindowHeight()*0.08,
+    width: getWindowHeight()*0.08,
+  },
   box: {
     width: 60,
     height: 60,
@@ -284,7 +310,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     height: "10%",
-    width:"100%",
+    width: "100%",
     alignSelf:"flex-start",
     borderColor: "white",
     borderWidth: 0.1,
