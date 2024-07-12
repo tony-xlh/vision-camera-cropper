@@ -15,7 +15,6 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
   }
 
   public override func callback(_ frame: Frame, withArguments arguments: [AnyHashable : Any]?) -> Any {
-    let buffer = frame.buffer
     var cropResult: [String:Any] = [:]
     guard let imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer) else {
       print("Failed to get CVPixelBuffer!")
@@ -30,17 +29,15 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
 
     var image:UIImage = UIImage(cgImage: cgImage)
     var degree = 0.0;
-
     if frame.orientation == UIImage.Orientation.left {
         degree = 90.0;
     }else if frame.orientation == UIImage.Orientation.down {
-        degree = 270.0;
+        degree = 180.0;
     }
-      
+
     if degree != 0.0 {
         image = VisionCameraCropper.rotate(image:image,degree:degree)
     }
-      
 
     let cropRegion = arguments?["cropRegion"] as? [String: Int]
     if cropRegion != nil {
