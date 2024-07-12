@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     position: 'absolute',
     bottom: 0,
-    height: "10%",
+    height: getWindowHeight()*0.1,
     width: "100%",
     alignSelf:"flex-start",
     borderColor: "white",
