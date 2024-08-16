@@ -1,4 +1,4 @@
-package com.visioncameracropperexample
+package visioncameracropper.example
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
