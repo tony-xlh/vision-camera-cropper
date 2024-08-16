@@ -1,6 +1,6 @@
 {
   "name": "vision-camera-cropper",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "description": "A react native vision camera frame processor for cropping",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -47,7 +47,10 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "cropper",
+    "image-processing",
+    "vision-camera"
   ],
   "repository": {
     "type": "git",
