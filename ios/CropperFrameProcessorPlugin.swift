@@ -39,7 +39,7 @@ public class CropperFrameProcessorPlugin: FrameProcessorPlugin {
         image = VisionCameraCropper.rotate(image:image,degree:degree)
     }
 
-    let cropRegion = arguments?["cropRegion"] as? [String: Int]
+    let cropRegion = arguments?["cropRegion"] as? [String: Double]
     if cropRegion != nil {
       let imgWidth = Double(image.cgImage!.width)
       let imgHeight = Double(image.cgImage!.height)
