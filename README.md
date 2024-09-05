@@ -80,6 +80,9 @@ Objective-C:
 
 You have to pass `{saveBitmap: true}` for the `crop` function.
 
+## Blog
+
+[How to Create a React Native Vision Camera Plugin to Crop Frames](https://www.dynamsoft.com/codepool/react-native-vision-camera-cropper-plugin.html)
 
 ## Contributing
 
