@@ -22,8 +22,8 @@ Add the plugin to your `babel.config.js`:
 
 ```js
 module.exports = {
-   plugins: [['react-native-worklets-core/plugin']],
-    // ...
+   plugins: [['react-native-worklets/plugin']],
+  // ...
 ```
 
 > Note: You have to restart metro-bundler for changes in the `babel.config.js` file to take effect.

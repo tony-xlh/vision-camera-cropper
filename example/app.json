@@ -1,4 +1,36 @@
 {
-  "name": "VisionCameraCropperExample",
-  "displayName": "VisionCameraCropperExample"
+  "expo": {
+    "name": "Example",
+    "slug": "vision-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera"
+      },
+      "bundleIdentifier": "com.vision.cropper.example"
+    },
+    "android": {
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.vision.cropper.example"
+    },
+    "plugins": [
+      "expo-image-picker",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ]
+    ]
+  }
 }

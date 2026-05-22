@@ -1,31 +1,43 @@
 {
   "name": "vision-camera-cropper-example",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "build:android": "react-native build-android --extra-params \"--no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a\"",
-    "build:ios": "react-native build-ios --scheme VisionCameraCropperExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
+    "prebuild": "expo prebuild",
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios --device",
+    "web": "expo start --web",
+    "clean:ios": "rm -rf ios && expo prebuild --platform ios",
+    "clean:android": "rm -rf android && expo prebuild --platform android",
+    "check-expo": "expo install --check"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-native": "0.75.1",
-    "react-native-svg": "^15.5.0",
-    "react-native-vision-camera": "^4.5.1",
-    "react-native-worklets-core": "^1.3.3"
+    "babel-preset-expo": "~56.0.11",
+    "expo": "~56.0.3",
+    "expo-build-properties": "~56.0.13",
+    "expo-image-picker": "~56.0.12",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-nitro-image": "^0.14.0",
+    "react-native-nitro-modules": "^0.35.6",
+    "react-native-reanimated": "4.3.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-svg": "15.15.4",
+    "react-native-vision-camera": "^5.0.9",
+    "react-native-vision-camera-worklets": "^5.0.9",
+    "react-native-worklets": "0.8.3",
+    "vision-camera-cropper": "link:.."
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
-    "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "0.75.1",
-    "@react-native/metro-config": "0.75.1",
-    "@react-native/typescript-config": "0.75.1",
-    "react-native-builder-bob": "^0.29.1"
-  },
-  "engines": {
-    "node": ">=18"
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/plugin-transform-arrow-functions": "^7.27.1",
+    "@babel/plugin-transform-shorthand-properties": "^7.27.1",
+    "@babel/plugin-transform-template-literals": "^7.27.1",
+    "@babel/preset-env": "^7.29.2",
+    "@types/react": "^19.2.15",
+    "typescript": "~6.0.3"
   }
 }
