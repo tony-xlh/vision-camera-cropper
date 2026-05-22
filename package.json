@@ -27,7 +27,6 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace vision-camera-cropper-example",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",

@@ -9,7 +9,9 @@ A react native vision camera frame processor for cropping
 
 For Vision Camera v3, use versions 0.x.
 
-For Vision Camera v4, use versions >= 1.0.0.
+For Vision Camera v4, use versions >= 1.0.0 < 2.0.0
+
+For Vision Camera v5, use versions >= 2.0.0
 
 ## Installation
 
@@ -36,18 +38,19 @@ module.exports = {
     import { crop } from 'vision-camera-cropper';
 
     // ...
-    const frameProcessor = useFrameProcessor((frame) => {
+    const frameOutput = useFrameOutput({
+    pixelFormat: 'yuv',
+    onFrame: (frame) => {
       'worklet';
-      //coordinates in percentage
-      const cropRegion = {
-        left:10,
-        top:10,
-        width:80,
-        height:30
-      }
-      const result = crop(frame,{cropRegion:cropRegion,includeImageBase64:true,saveAsFile:false});
-      console.log(result.base64);
-    }, []);
+      
+      const result = crop(frame, {
+        cropRegion: cropRegionShared.value,
+        includeImageBase64: true,
+      });
+
+      frame.dispose();
+    },
+  });
     ```
 
 2. Rotate an image.
@@ -55,30 +58,6 @@ module.exports = {
     ```js
     const rotated = await rotateImage(base64,degree);
     ```
-
-## Get Bitmap/UIImage via Reflection
-
-If you are developing a plugin to get the camera frames, you can use reflection to get it as Bitmap or UIImage on the native side.
-
-Java:
-
-```java
-Class cls = Class.forName("com.visioncameracropper.CropperFrameProcessorPlugin");
-Method m = cls.getMethod("getBitmap",null);
-Bitmap bitmap = (Bitmap) m.invoke(null, null);
-```
-
-
-Objective-C:
-
-```objc
-- (UIImage*)getUIImage{
-    UIImage *image = ((UIImage* (*)(id, SEL))objc_msgSend)(objc_getClass("CropperFrameProcessorPlugin"), sel_registerName("getBitmap"));
-    return image;
-}
-```
-
-You have to pass `{saveBitmap: true}` for the `crop` function.
 
 ## Blog
 

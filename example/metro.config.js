@@ -15,7 +15,7 @@ config.watchFolders = [workspaceRoot];
 
 config.resolver = {
   ...config.resolver,
-  // IMPORTANT: allow resolving through symlinks (Yarn "link:..")
+  // IMPORTANT: allow resolving through symlinks (pnpm "link:..")
   unstable_enableSymlinks: true,
   // Ensure React/RN come from the example app only
   nodeModulesPaths: [path.join(projectRoot, 'node_modules')],

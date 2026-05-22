@@ -25,9 +25,6 @@ import { useSharedValue } from 'react-native-reanimated';
 export default function App() {
   const { hasPermission, requestPermission } = useCameraPermission();
 
-  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>(
-    'portrait'
-  );
   const [imageData, setImageData] = useState<undefined | string>(undefined);
   const [frameWidth, setFrameWidth] = useState(1280);
   const [frameHeight, setFrameHeight] = useState(720);
@@ -37,40 +34,37 @@ export default function App() {
     width: 100,
     height: 100,
   });
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>(
+    'portrait'
+  );
+
   const cropRegionShared = useSharedValue<undefined | CropRegion>(undefined);
   const frameWidthShared = useSharedValue(1280);
   const frameHeightShared = useSharedValue(720);
   const taken = useSharedValue(false);
   const shouldTake = useSharedValue(false);
-  const [pressed, setPressed] = React.useState(false);
-  const [switchPressed, setSwitchPressed] = React.useState(false);
-  const [isFront, setIsFront] = React.useState(false);
+  const [pressed, setPressed] = useState(false);
+  const [switchPressed, setSwitchPressed] = useState(false);
+  const [isFront, setIsFront] = useState(false);
   const back = useCameraDevice('back');
   const front = useCameraDevice('front');
-  // const backFormat = useCameraFormat(back, [
-  //   { videoAspectRatio: 16 / 9 },
-  //   { photoAspectRatio: 16 / 9 },
-  //   { videoResolution: { width: 1920, height: 1080 } },
-  //   { fps: 30 },
-  // ]);
-  // const frontFormat = useCameraFormat(front, [
-  //   { videoAspectRatio: 16 / 9 },
-  //   { photoAspectRatio: 16 / 9 },
-  //   { videoResolution: { width: 1920, height: 1080 } },
-  //   { fps: 30 },
-  // ]);
+
   const updateFrameSize = (
     width: number,
     height: number,
-    orientation: 'portrait' | 'landscape'
+    frameOrientation: 'portrait' | 'landscape'
   ) => {
-    if (width != frameWidthShared.value && height != frameHeightShared.value) {
+    if (
+      width !== frameWidthShared.value &&
+      height !== frameHeightShared.value
+    ) {
       frameWidthShared.value = width;
       frameHeightShared.value = height;
       setFrameWidth(width);
       setFrameHeight(height);
-      setOrientation(orientation);
-      if (orientation == 'portrait') {
+      setOrientation(frameOrientation);
+
+      if (frameOrientation === 'portrait') {
         updateCropRegion({ width: height, height: width });
       } else {
         updateCropRegion({ width: width, height: height });
@@ -79,38 +73,27 @@ export default function App() {
   };
 
   const updateCropRegion = (size?: { width: number; height: number }) => {
-    //const size = getFrameSize();
     if (!size) {
       size = getFrameSize();
     }
 
     let region;
+
     if (size.width > size.height) {
       let regionWidth = 0.7 * size.width;
       let desiredRegionHeight = regionWidth / (85.6 / 54);
       let height = Math.ceil((desiredRegionHeight / size.height) * 100);
-      region = {
-        left: 15,
-        width: 70,
-        top: 10,
-        height: height,
-      };
+      region = { left: 15, width: 70, top: 10, height: height };
     } else {
       let regionWidth = 0.8 * size.width;
       let desiredRegionHeight = regionWidth / (85.6 / 54);
       let height = Math.ceil((desiredRegionHeight / size.height) * 100);
-      region = {
-        left: 10,
-        width: 80,
-        top: 20,
-        height: height,
-      };
+      region = { left: 10, width: 80, top: 20, height: height };
     }
+
     setCropRegion(region);
     cropRegionShared.value = region;
   };
-
-  // const updateFrameSizeJS = updateFrameSize;
 
   const frameOutput = useFrameOutput({
     pixelFormat: 'yuv',
@@ -121,20 +104,22 @@ export default function App() {
         updateFrameSize,
         frame.width,
         frame.height,
-        frame.orientation == 'up' || frame.orientation == 'down'
+        frame.orientation === 'up' || frame.orientation === 'down'
           ? 'portrait'
           : 'landscape'
       );
 
       if (
-        taken.value == false &&
-        shouldTake.value == true &&
-        cropRegionShared.value != undefined
+        taken.value === false &&
+        shouldTake.value === true &&
+        cropRegionShared.value !== undefined
       ) {
         const result = crop(frame, {
           cropRegion: cropRegionShared.value,
           includeImageBase64: true,
+          saveAsFile: true,
         });
+        console.log({ path: result.path });
         if (result.base64) {
           scheduleOnRN(setImageData, 'data:image/jpeg;base64,' + result.base64);
           taken.value = true;
@@ -166,7 +151,7 @@ export default function App() {
 
   const getFrameSize = (): { width: number; height: number } => {
     let width: number, height: number;
-    if (orientation == 'portrait') {
+    if (orientation === 'portrait') {
       width = frameHeight;
       height = frameWidth;
     } else {
@@ -177,7 +162,7 @@ export default function App() {
   };
 
   const renderImage = () => {
-    if (imageData != undefined) {
+    if (imageData !== undefined) {
       return (
         <Image
           style={styles.srcImage}
@@ -213,7 +198,7 @@ export default function App() {
           />
           <Svg
             preserveAspectRatio={
-              Platform.OS == 'android' ? 'xMidYMid slice' : ''
+              Platform.OS === 'android' ? 'xMidYMid slice' : ''
             }
             style={StyleSheet.absoluteFill}
             viewBox={getViewBox()}
@@ -262,7 +247,7 @@ export default function App() {
           <Modal
             animationType="slide"
             transparent={true}
-            visible={imageData != undefined}
+            visible={imageData !== undefined}
             supportedOrientations={['portrait', 'landscape']}
             onRequestClose={() => {
               setImageData(undefined);
