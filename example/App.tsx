@@ -104,7 +104,7 @@ export default function App() {
         updateFrameSize,
         frame.width,
         frame.height,
-        frame.orientation === 'up' || frame.orientation === 'down'
+        frame.orientation === 'left' || frame.orientation === 'right'
           ? 'portrait'
           : 'landscape'
       );
@@ -151,6 +151,7 @@ export default function App() {
 
   const getFrameSize = (): { width: number; height: number } => {
     let width: number, height: number;
+
     if (orientation === 'portrait') {
       width = frameHeight;
       height = frameWidth;
@@ -208,7 +209,7 @@ export default function App() {
               y={(cropRegion.top / 100) * getFrameSize().height}
               width={(cropRegion.width / 100) * getFrameSize().width}
               height={(cropRegion.height / 100) * getFrameSize().height}
-              strokeWidth="2"
+              strokeWidth={4}
               stroke="red"
               fillOpacity={0.0}
             />
