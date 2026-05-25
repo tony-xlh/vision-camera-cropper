@@ -39,18 +39,18 @@ module.exports = {
 
     // ...
     const frameOutput = useFrameOutput({
-    pixelFormat: 'yuv',
-    onFrame: (frame) => {
-      'worklet';
+      pixelFormat: 'yuv',
+      onFrame: (frame) => {
+        'worklet';
       
-      const result = crop(frame, {
-        cropRegion: cropRegionShared.value,
-        includeImageBase64: true,
-      });
+        const result = crop(frame, {
+          cropRegion: cropRegionShared.value,
+          includeImageBase64: true,
+        });
 
-      frame.dispose();
-    },
-  });
+        frame.dispose();
+      },
+    });
     ```
 
 2. Rotate an image.
@@ -58,10 +58,6 @@ module.exports = {
     ```js
     const rotated = await rotateImage(base64,degree);
     ```
-
-## Blog
-
-[How to Create a React Native Vision Camera Plugin to Crop Frames](https://www.dynamsoft.com/codepool/react-native-vision-camera-cropper-plugin.html)
 
 ## Contributing
 
