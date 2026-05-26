@@ -1,0 +1,31 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "visioncameracropper"
+  ],
+  "ios": {
+    "iosModuleName": "NitroVisionCameraCropper"
+  },
+  "android": {
+    "androidNamespace": [
+      "visioncameracropper"
+    ],
+    "androidCxxLibName": "NitroVisionCameraCropper"
+  },
+  "autolinking": {
+    "VisionCameraCropper": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "VisionCameraCropperFactory"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "VisionCameraCropperFactory"
+      }
+    }
+  },
+  "ignorePaths": [
+    "**/node_modules",
+    "**/example"
+  ]
+}

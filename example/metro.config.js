@@ -1,18 +1,24 @@
+// example/metro.config.js
 const path = require('path');
-const { getDefaultConfig } = require('@react-native/metro-config');
-const { getConfig } = require('react-native-builder-bob/metro-config');
-const pkg = require('../package.json');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const root = path.resolve(__dirname, '..');
+const projectRoot = __dirname; // example/
+const workspaceRoot = path.resolve(projectRoot, '..'); // repo root (your lib)
 
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
-module.exports = getConfig(getDefaultConfig(__dirname), {
-  root,
-  pkg,
-  project: __dirname,
-});
+// Small helper to escape paths for a RegExp
+const esc = (p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const config = getDefaultConfig(projectRoot);
+
+// Watch the library folder so edits in ../src/** refresh
+config.watchFolders = [workspaceRoot];
+
+config.resolver = {
+  ...config.resolver,
+  // IMPORTANT: allow resolving through symlinks (pnpm "link:..")
+  unstable_enableSymlinks: true,
+  // Ensure React/RN come from the example app only
+  nodeModulesPaths: [path.join(projectRoot, 'node_modules')],
+};
+
+module.exports = config;
